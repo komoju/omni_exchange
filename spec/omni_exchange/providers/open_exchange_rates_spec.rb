@@ -1,0 +1,50 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+
+RSpec.describe OmniExchange::OpenExchangeRates do
+  subject(:open_exchange_rates) { OmniExchange::OpenExchangeRates }
+  let(:open_exchange_rates_read_timeout) { nil }
+  let(:open_exchange_rates_connect_timeout) { nil }
+  let(:open_exchange_app_id) { ENV['OPEN_EXCHANGE_RATES_APP_ID'] }
+
+  before do
+    OmniExchange.configure do |config|
+      config.provider_config = {
+        open_exchange_rates: {
+          read_timeout: open_exchange_rates_read_timeout,
+          connect_timeout: open_exchange_rates_read_timeout,
+          app_id: 'test'
+        }
+      }
+    end
+  end
+
+  context 'self.get_exchange_rate' do
+    let(:open_exchange_rates_read_timeout) { 0 }
+    let(:open_exchange_rates_connect_timeout) { 0 }
+    let(:response) do
+      VCR.use_cassette('omni_exchange/open_exchange_rates_unregistered_provider', record: :new_episodes) { subject.get_exchange_rate(base_currency: 'USD', target_currency: 'JPY') }
+    end
+
+    it 'sets "amount_to_multiply_exchange_rate_by" correctly for currencies that use cents' do
+      expect(subject.get_currency_unit('USD')).to eq(0.01)
+    end
+
+    it 'sets "amount_to_multiply_exchange_rate_by" correctly for currencies that do not use cents' do
+      expect(subject.get_currency_unit('JPY')).to eq(1)
+    end
+
+    context 'when there is a read timeout' do
+      it 'raises a Faraday::Error' do
+        expect { response }.to raise_error(Faraday::Error)
+      end
+    end
+
+    context 'when there is a connection open timeout' do
+      it 'raises a Faraday::ConnectionFailed if there is a connection open timeout' do
+        expect { response }.to raise_error(Faraday::ConnectionFailed)
+      end
+    end
+  end
+end
