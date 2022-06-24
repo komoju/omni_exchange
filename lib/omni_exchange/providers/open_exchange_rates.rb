@@ -19,9 +19,7 @@ module OmniExchange
       config = OmniExchange.configuration.provider_config[:open_exchange_rates]
       app_id = config[:app_id]
 
-      api = Faraday.new(ENDPOINT_URL) do |conn|
-        conn.response :json, parser_options: { symbolize_names: true }
-      end
+      api = Faraday.new(OmniExchange::OpenExchangeRates::ENDPOINT_URL)
 
       begin
         response = api.get do |req|
@@ -32,7 +30,8 @@ module OmniExchange
       rescue Faraday::Error, Faraday::ConnectionFailed => e
         raise e.class, 'Open Exchange Rates has timed out.'
       end
-      exchange_rate = response.body[:rates][target_currency.to_sym].to_d
+
+      exchange_rate = JSON.parse(response.body, symbolize_names: true)[:rates][target_currency.to_sym].to_d
 
       currency_unit = get_currency_unit(base_currency)
 

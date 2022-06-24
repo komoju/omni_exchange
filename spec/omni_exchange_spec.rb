@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe OmniExchange do
   let(:xe_api_id) { ENV['XE_API_ID'] }
   let(:xe_api_key) { ENV['XE_API_KEY'] }
-  let(:xe_read_timeout) { nil }
+  let(:xe_read_timeout) { 0 }
   let(:open_exchange_app_id) { ENV['OPEN_EXCHANGE_RATES_APP_ID'] }
   let(:open_exchange_rates_read_timeout) { nil }
 
@@ -51,7 +51,7 @@ RSpec.describe OmniExchange do
 
       it 'converts an amount of one currency to another currency using a secondary data provider' do
         timed_out_xe = double OmniExchange::Xe
-        allow(timed_out_xe).to receive(:get_exchange_rate).and_raise(Faraday::Error)
+        allow(timed_out_xe).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow...')
         allow(OmniExchange::Provider).to receive(:load_provider).with('slow_xe').and_return(timed_out_xe)
         allow(OmniExchange::Provider).to receive(:load_provider).with(:open_exchange_rates).and_return(OmniExchange::OpenExchangeRates)
 

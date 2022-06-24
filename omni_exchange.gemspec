@@ -8,17 +8,17 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Yun Chung']
   spec.email         = ['yunseok_chung@degica.com']
 
-  spec.summary       = 'Write a short summary, because RubyGems requires one.'
-  spec.description   = 'Write a longer description or delete this line.'
+  spec.summary       = 'OmniExchange converts currencies using up-to-the-minute foreign exchange rates.'
+  spec.description   = 'OmniExchange converts currencies using up-to-the-minute foreign exchange rates.'
   spec.homepage      = 'https://degica.com'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
-  spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+  spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
-  spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://degica.com'
-  spec.metadata['changelog_uri'] = 'https://degica.com'
+  spec.metadata['homepage_uri'] = 'https://degica.com'
+  spec.metadata['source_code_uri'] = 'https://github.com/degica/omni_exchange'
+  spec.metadata['changelog_uri'] = 'https://github.com/degica/omni_exchange'
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'faraday'
+  spec.add_dependency 'faraday', '0.17.4'
 
   spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'pry'

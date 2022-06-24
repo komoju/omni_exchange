@@ -21,9 +21,9 @@ module OmniExchange
       api_key = config[:api_key]
       currency_unit = get_currency_unit(base_currency)
 
-      api = Faraday.new(ENDPOINT_URL) do |conn|
-        conn.request :authorization, :basic, api_id, api_key
-        conn.response :json, parser_options: { symbolize_names: true }
+      api = Faraday.new(OmniExchange::Xe::ENDPOINT_URL) do |f|
+        f.request :basic_auth, api_id, api_key
+        f.adapter :net_http
       end
 
       begin
@@ -36,7 +36,7 @@ module OmniExchange
         raise e.class, 'xe.com has timed out.'
       end
 
-      response.body[:to][0][:mid].to_d
+      JSON.parse(response.body, symbolize_names: true)[:to][0][:mid].to_d
     end
 
     # when this file is required at the top of lib/omni_exchange.rb, this method call is run and allows
