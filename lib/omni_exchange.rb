@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-# requires all of the provider files in the providers folder
-#   which then allows the providers to be registered
-Dir['omni_exchange/providers/*.rb'].each do |file|
-  require_relative file
-end
+require 'omni_exchange/provider'
+# in order to make sure that all API data providers are registered correctly,
+#   all of the provider files in the providers folder must be required
+require 'omni_exchange/providers/open_exchange_rates'
+require 'omni_exchange/providers/xe'
 require 'omni_exchange/version'
 require 'omni_exchange/configuration'
 require 'faraday'
@@ -54,7 +54,7 @@ module OmniExchange
     # Gracefully hit each provider and fail-over to the next one
     provider_classes.each do |klass|
       rate = klass.get_exchange_rate(base_currency: base_currency, target_currency: target_currency)
-      
+    
       return rate * amount.to_d
     rescue Faraday::Error, Faraday::ConnectionFailed => e
       error_messages << e.inspect
