@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe OmniExchange do
   let(:xe_api_id) { ENV['XE_API_ID'] }
   let(:xe_api_key) { ENV['XE_API_KEY'] }
-  let(:xe_read_timeout) { 0 }
+  let(:xe_read_timeout) { nil }
   let(:open_exchange_app_id) { ENV['OPEN_EXCHANGE_RATES_APP_ID'] }
   let(:open_exchange_rates_read_timeout) { nil }
 
