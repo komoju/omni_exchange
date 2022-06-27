@@ -60,4 +60,32 @@ RSpec.describe OmniExchange do
       end
     end
   end
+
+  context 'the .get_exchange_rate method' do
+    context 'when exchange rate data is requested from an API provider that is not registered in the providers array' do
+      let(:response) do
+        OmniExchange.get_exchange_rate(base_currency: 'JPY', target_currency: 'KRW', providers: ['NOT REGISTERED', :open_exchange_rates])
+      end
+
+      it 'it expects to break without attempting to get API data from another provider' do
+        expect { response }.to raise_error(LoadError)
+      end
+    end
+
+    context 'when the primary data-provider times out' do
+      let(:response) do
+        VCR.use_cassette('omni_exchange/omni_exchange_get_exchange_rate', record: :new_episodes) { OmniExchange.get_exchange_rate(base_currency: 'USD', target_currency: 'JPY', providers: ['slow_xe', :open_exchange_rates]) }
+      end
+
+      it 'converts an amount of one currency to another currency using a secondary data provider' do
+        timed_out_xe = double OmniExchange::Xe
+        allow(timed_out_xe).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow...')
+        allow(OmniExchange::Provider).to receive(:load_provider).with('slow_xe').and_return(timed_out_xe)
+        allow(OmniExchange::Provider).to receive(:load_provider).with(:open_exchange_rates).and_return(OmniExchange::OpenExchangeRates)
+
+        expect(response).to be_a(BigDecimal)
+        expect(response).to eq(0.13469684615e1)
+      end
+    end
+  end
 end

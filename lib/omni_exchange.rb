@@ -62,5 +62,35 @@ module OmniExchange
     
     raise "Failed to load #{base_currency}->#{target_currency}:\n#{exception_messages.join("\n")}"
   end
+
+  # This method returns the exchange rate, the rate at which the smallest unit of one currency (the base currency)
+  #   will be exchanged for another currency (the target currency), from API providers 
+  #
+  # @param base_currency: [String] the ISO Currency Code of the currency that you're exchanging from. ie. "USD", "JPY"
+  # @param target_currency: [String] the ISO Currency Code of the currency that you're exchanging to. ie. "EUR", "KRW"
+  # @param providers: [Array] an array of symbols of the providers that will be used to get exchange rates API
+  #   data. The symbols must be found in the @providers hash in the Provider class (lib/omni_exchange/provider.rb).
+  #   ie. xe:, :open_exchange_rates
+  # @return [BigDecimal] the amount of the base currency exchanged to the target currency using an exchange rate
+  #   provided by one of the data providers in the providers hash. The final amount is returned as a BigDecimal
+  #   for precise calculation. If all of the providers in the providers hash fail to retrieve data,
+  #   an exception is raised.
+  def get_exchange_rate(base_currency:, target_currency:, providers:)
+    error_messages = []
+
+    # Make sure all providers passed exist. If not, a LoadError is raise and not rescued
+    provider_classes = providers.map { |p| OmniExchange::Provider.load_provider(p) }
+
+    # Gracefully hit each provider and fail-over to the next one
+    provider_classes.each do |klass|
+      rate = klass.get_exchange_rate(base_currency: base_currency, target_currency: target_currency)
+    
+      return rate
+    rescue Faraday::Error, Faraday::ConnectionFailed => e
+      error_messages << e.inspect
+    end
+    
+    raise "Failed to load #{base_currency}->#{target_currency}:\n#{exception_messages.join("\n")}"
+  end
 end
 # rubocop:enable Lint/Syntax
