@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+# rubocop:disable Style/ExponentialNotation
 RSpec.describe OmniExchange do
   let(:xe_api_id) { ENV['XE_API_ID'] }
   let(:xe_api_key) { ENV['XE_API_KEY'] }
@@ -55,8 +56,7 @@ RSpec.describe OmniExchange do
         allow(OmniExchange::Provider).to receive(:load_provider).with('slow_xe').and_return(timed_out_xe)
         allow(OmniExchange::Provider).to receive(:load_provider).with(:open_exchange_rates).and_return(OmniExchange::OpenExchangeRates)
 
-        expect(response).to be_a(BigDecimal)
-        expect(response).to eq(0.9550665e3)
+        expect(response).to be_a(BigDecimal).and eq(0.9550665e3)
       end
     end
   end
@@ -83,9 +83,9 @@ RSpec.describe OmniExchange do
         allow(OmniExchange::Provider).to receive(:load_provider).with('slow_xe').and_return(timed_out_xe)
         allow(OmniExchange::Provider).to receive(:load_provider).with(:open_exchange_rates).and_return(OmniExchange::OpenExchangeRates)
 
-        expect(response).to be_a(BigDecimal)
-        expect(response).to eq(0.13469684615e1)
+        expect(response).to be_a(BigDecimal).and eq(0.13469684615e1)
       end
     end
   end
 end
+# rubocop:enable Style/ExponentialNotation
