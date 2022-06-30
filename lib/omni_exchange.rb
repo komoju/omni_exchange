@@ -8,6 +8,7 @@ require 'omni_exchange/providers/xe'
 require 'omni_exchange/version'
 require 'omni_exchange/configuration'
 require 'faraday'
+require 'money'
 require 'json'
 require 'bigdecimal/util'
 

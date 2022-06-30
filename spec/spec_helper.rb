@@ -2,6 +2,7 @@
 
 require 'omni_exchange'
 require 'faraday'
+require 'money'
 require 'vcr'
 require 'dotenv/load'
 require 'pry'
