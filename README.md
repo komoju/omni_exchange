@@ -2,7 +2,7 @@
 
 OmniExchange converts currencies using up-to-the-minute foreign exchange rates.
 
-OmniExchange also supports fail-over logic and handles timeouts. In other words, if currency conversion isn't possible because an API data source cannot provide an exchange rate, OR if that data source times out, OmniExchange will retrieve exchange rate data from another API data source.
+OmniExchange also supports fail-over logic and handles timeouts. In other words, if currency conversion isn't possible because an API data source cannot provide an exchange rate, OR if that data source times out, OmniExchange will retrieve exchange rate data seamlessly from another API data source.
 
 ## Installation
 
@@ -46,13 +46,13 @@ OmniExchange.configure do |config|
 end
 ```
 
-#### **Step 3) Convert Currency**
+#### **Step 3a) Convert Currency...**
 
 To convert currency, all you have to do is call `OmniExchange.exchange_currency()`. This method requires you to pass the following four named parameters:
 1. amount: (Integer)the amount of the currency you want to convert. NOTE: OmniExchange will read this amount as being the smallest unit of a currency. In other words, if you pass `10` as the amount for USD, OmniExchange will read this as 10 cents, not 10 dollars.
 2. base_currency: (String) the ISO Currency Code of the currency that you're exchanging from. ie. 'USD', 'JPY'
 3. target_currency: (String) the ISO Currency Code of the currency that you're exchanging to. ie. 'EUR', 'KRW'
-4. providers: (Array) the keys of the API providers that you want data from in order of preference. ie. [:xe, :open_exchange_rates]
+4. providers: (Array of Symbols) the keys of the API providers that you want data from in order of preference. ie. [:xe, :open_exchange_rates]
 
 [For the sake of precise calculation](https://www.bigbinary.com/blog/handling-money-in-ruby), you'll get back a BigDecimal. Simply call `.to_f` to the result if you'd like to see a number that is easier to read.
 
@@ -64,6 +64,26 @@ USD_to_JPY = OmniExchange.exchange_currency(amount: 1000, base_currency: "USD", 
 
 puts USD_to_JPY # => 0.1345807e4 
 puts USD_to_JPY.to_f # => 1345.807
+
+```
+
+#### **Step 3b) ...or, Get An Exchange Rate**
+
+If you'd prefer to get just an exchange rate, all you have to do is call `OmniExchange.get_exchange_rate()`. This method requires you to pass the following three named parameters:
+1. base_currency: (String) the ISO Currency Code of the currency that you're exchanging from. ie. 'USD', 'JPY'
+2. target_currency: (String) the ISO Currency Code of the currency that you're exchanging to. ie. 'EUR', 'KRW'
+3. providers: (Array of Symbols) the keys of the API providers that you want data from in order of preference. ie. [:open_exchange_rates, :xe]
+
+[Again, for the sake of precise calculation](https://www.bigbinary.com/blog/handling-money-in-ruby), you'll get back a BigDecimal. Simply call `.to_f` to the result if you'd like to see a number that is easier to read.
+
+
+For example, let's say that I want the current exchange rate of US Dollars to Japanese Yen, and I want it from Open Exchange Rates. If Open Exchange Rates fails, I'd like OmniExchange to try to get an exchange rate using Xe as a fallback.
+
+```ruby
+USD_to_JPY_rate = OmniExchange.get_exchange_rate(base_currency: "USD", target_currency: "JPY", providers: [:open_exchange_rates, :xe])
+
+puts USD_to_JPY_rate # => 0.1366345e1 
+puts USD_to_JPY_rate.to_f # => 1.366345 
 
 ```
 
