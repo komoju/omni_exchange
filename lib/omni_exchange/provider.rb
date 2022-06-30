@@ -4,7 +4,6 @@ module OmniExchange
   class Provider
     # @providers is a hash of registered providers that OmniExchange can request exchange rates data from
     @providers = {}
-    @currency_data = nil
 
     # This method registers providers by adding a provider's name as a key and a provider class as a value to
     #   @providers. This happens automatically on load at the top of the lib/omni_exchange.rb file when each
@@ -43,18 +42,13 @@ module OmniExchange
 
     # Some currencies, such as the US dollar, have subunits (ie. cents). Therefore, to make sure that currencies are
     #   exchanged accurately, a currency's subunit needs to be taken into account, and that's what this method does.
-    #   Subunit data of currencies is stored as @currency_data after being read from the currency_data.json file.
+    #   Subunit data is easily found through use of the RubyMoney gem.
     #
     # @param base_currency [String] the ISO Currency Code of the currency that you're exchanging from. A check is done
     #   on this currency to see if it has subunits (such as the US dollar having cents). ie. "USD", "JPY"
-    # @return [Float] the amount an exchange rate should be multiplied by to account for subunits
+    # @return [Float] the amount an exchange rate should be multiplied by to account for a currency's potential subunits
     def self.get_currency_unit(base_currency)
-      return 1.0 / @currency_data[base_currency.downcase]['subunit_to_unit'] if @currency_data
-
-      file = File.read(File.join(File.dirname(__FILE__), './currency_data.json'))
-      @currency_data = JSON.parse(file)
-
-      1.0 / @currency_data[base_currency.downcase]['subunit_to_unit']
+      1.0 / Money::Currency.wrap(base_currency).subunit_to_unit
     end
   end
 end
