@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 
-# rubocop:disable Style/ExponentialNotation
 RSpec.describe OmniExchange do
   let(:xe_api_id) { ENV['XE_API_ID'] }
   let(:xe_api_key) { ENV['XE_API_KEY'] }
@@ -88,4 +87,3 @@ RSpec.describe OmniExchange do
     end
   end
 end
-# rubocop:enable Style/ExponentialNotation
