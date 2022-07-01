@@ -8,6 +8,7 @@ require 'faraday'
 require 'money'
 require_relative '../lib/omni_exchange/provider'
 require_relative '../lib/omni_exchange/configuration'
+require_relative '../lib/omni_exchange/error'
 require_relative '../lib/omni_exchange/providers/xe'
 require_relative '../lib/omni_exchange/providers/open_exchange_rates'
 

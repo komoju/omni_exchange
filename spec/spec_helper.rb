@@ -7,6 +7,8 @@ require 'vcr'
 require 'dotenv/load'
 require 'pry'
 require 'omni_exchange/provider'
+require 'omni_exchange/configuration'
+require 'omni_exchange/error'
 require 'omni_exchange/providers/xe'
 require 'omni_exchange/providers/open_exchange_rates'
 

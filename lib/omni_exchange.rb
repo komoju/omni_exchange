@@ -7,6 +7,7 @@ require 'omni_exchange/providers/open_exchange_rates'
 require 'omni_exchange/providers/xe'
 require 'omni_exchange/version'
 require 'omni_exchange/configuration'
+require 'omni_exchange/error'
 require 'faraday'
 require 'money'
 require 'json'
@@ -58,7 +59,7 @@ module OmniExchange
       Money::Currency.wrap(base_currency)
       Money::Currency.wrap(target_currency)
     rescue Money::Currency::UnknownCurrency => exception
-      raise Money::Currency::UnknownCurrency, "#{exception}"
+      raise OmniExchange::UnknownCurrency, "#{exception}"
     end
 
     error_messages = []
@@ -73,11 +74,11 @@ module OmniExchange
       exchanged_amount = rate * amount.to_d
 
       return { converted_amount: exchanged_amount, exchange_rate: rate, provider_class: klass }
-        rescue Faraday::Error, Faraday::ConnectionFailed => e
+    rescue Faraday::Error, Faraday::ConnectionFailed => e
       error_messages << e.inspect
     end
     
-    raise "Failed to load #{base_currency}->#{target_currency}:\n#{exception_messages.join("\n")}"
+    raise OmniExchange::HttpError, "Failed to load #{base_currency}->#{target_currency}:\n#{error_messages.join("\n")}"
   end
 end
 # rubocop:enable Lint/Syntax
