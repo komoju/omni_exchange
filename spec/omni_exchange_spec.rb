@@ -52,7 +52,7 @@ RSpec.describe OmniExchange do
         OmniExchange.get_fx_data(amount: 100, base_currency: 'JPY', target_currency: 'KRW', providers: ['NOT REGISTERED', :open_exchange_rates])
       end
 
-      it 'it expects to break without attempting to get API data from another provider' do
+      it 'breaks without attempting to get API data from another provider' do
         expect { response }.to raise_error(LoadError)
       end
     end
@@ -64,11 +64,34 @@ RSpec.describe OmniExchange do
 
       it 'converts an amount of one currency to another currency using a secondary data provider' do
         timed_out_xe = double OmniExchange::Xe
-        allow(timed_out_xe).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow...')
+        allow(timed_out_xe).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow connection...')
         allow(OmniExchange::Provider).to receive(:load_provider).with('slow_xe').and_return(timed_out_xe)
         allow(OmniExchange::Provider).to receive(:load_provider).with(:open_exchange_rates).and_return(OmniExchange::OpenExchangeRates)
 
         expect(response[:converted_amount]).to be_a(BigDecimal).and eq(0.9550665e3)
+      end
+    end
+
+    context 'when all providers time out' do
+      let(:response) { OmniExchange.get_fx_data(amount: 100, base_currency: 'JPY', target_currency: 'KRW', providers: %w[slow_xe slow_open_exchange]) }
+
+      it 'raises a OmniExchange::HttpError' do
+        timed_out_xe = double OmniExchange::Xe
+        timed_out_open_exchange_rates = double OmniExchange::OpenExchangeRates
+        allow(timed_out_xe).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow connection...')
+        allow(timed_out_open_exchange_rates).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow connection...')
+        allow(OmniExchange::Provider).to receive(:load_provider).with('slow_xe').and_return(timed_out_xe)
+        allow(OmniExchange::Provider).to receive(:load_provider).with('slow_open_exchange').and_return(timed_out_open_exchange_rates)
+
+        expect { response }.to raise_error(OmniExchange::HttpError)
+      end
+    end
+
+    context 'when there is an unknown or invalid currency' do
+      let(:response) { OmniExchange.get_fx_data(amount: 100, base_currency: 'fake_crypto', target_currency: 'fake_currency', providers: [:open_exchange_rates]) }
+
+      it 'raises a OmniExchange::UnknownCurrency' do
+        expect { response }.to raise_error(OmniExchange::UnknownCurrency)
       end
     end
   end
