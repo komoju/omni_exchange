@@ -33,9 +33,9 @@ module OmniExchange
 
       exchange_rate = JSON.parse(response.body, symbolize_names: true)[:rates][target_currency.to_sym].to_d
 
-      currency_unit = get_currency_unit(base_currency)
+      currency_unit = get_currency_unit(base_currency).to_d
 
-      exchange_rate * currency_unit
+      (exchange_rate * currency_unit).to_d
     end
 
     # when this file is required at the top of lib/omni_exchange.rb, this method call is run and allows

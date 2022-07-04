@@ -71,7 +71,7 @@ module OmniExchange
     provider_classes.each do |klass|
       rate = klass.get_exchange_rate(base_currency: base_currency, target_currency: target_currency)
 
-      exchanged_amount = rate * amount.to_d
+      exchanged_amount = rate.to_d * amount.to_d
 
       return { converted_amount: exchanged_amount, exchange_rate: rate, provider_class: klass }
     rescue Faraday::Error, Faraday::ConnectionFailed => e
