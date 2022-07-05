@@ -74,7 +74,7 @@ module OmniExchange
       exchanged_amount = rate.to_d * amount.to_d
 
       return { converted_amount: exchanged_amount, exchange_rate: rate, provider_class: klass }
-    rescue Faraday::Error, Faraday::ConnectionFailed => e
+    rescue Faraday::Error, Faraday::ConnectionFailed, OmniExchange::XeMonthlyLimit => e
       error_messages << e.inspect
     end
     

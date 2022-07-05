@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'pry'
 
 RSpec.describe OmniExchange::Xe do
   subject(:xe) { OmniExchange::Xe }
@@ -44,8 +45,18 @@ RSpec.describe OmniExchange::Xe do
 
     context 'when there is a connection open timeout' do
       let(:xe_connect_timeout) { 0 }
-      it 'raises a Faraday::ConnectionFailed if there is a connection open timeout' do
+      it 'raises a Faraday::ConnectionFailed exception' do
         expect { response }.to raise_error(Faraday::ConnectionFailed)
+      end
+    end
+
+    context "when you have exceeded xe.com's monthly request limit" do
+      let(:request) { subject.get_exchange_rate }
+
+      it 'raises an OmniExchange::XeMonthlyLimit exception' do
+        allow(subject).to receive(:get_exchange_rate).and_raise(OmniExchange::XeMonthlyLimit)
+
+        expect { request }.to raise_error(OmniExchange::XeMonthlyLimit)
       end
     end
   end
