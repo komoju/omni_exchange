@@ -12,6 +12,7 @@ require 'faraday'
 require 'money'
 require 'json'
 require 'bigdecimal/util'
+require 'net/http'
 
 # rubocop:disable Lint/Syntax
 module OmniExchange
@@ -31,6 +32,9 @@ module OmniExchange
   def self.configure
     yield(configuration)
   end
+
+  # if a provider raises one of these exceptions, OmniExchange will gracefully attempt to use another provider
+  EXCEPTIONS = [Faraday::Error, Faraday::ConnectionFailed, Faraday::TimeoutError, Net::OpenTimeout, Net::WriteTimeout, Net::ReadTimeout, OpenSSL::SSL::SSLError]
 
   module_function
 
@@ -59,8 +63,6 @@ module OmniExchange
       raise OmniExchange::UnknownCurrency, "#{exception}"
     end
 
-    # if a provider raises one of these exceptions, OmniExchange will gracefully attempt to use another provider
-    exceptions = [Faraday::Error, Faraday::ConnectionFailed, OmniExchange::XeMonthlyLimit, JSON::ParserError]
     error_messages = []
 
     # Make sure all providers passed exist. If not, a LoadError is raise and not rescued
@@ -73,7 +75,7 @@ module OmniExchange
       exchanged_amount = rate.to_d * amount.to_d
 
       return { converted_amount: exchanged_amount, exchange_rate: rate, provider: OmniExchange::Provider.all.key(klass) }
-    rescue *exceptions => e
+    rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
       error_messages << e.inspect
     end
     

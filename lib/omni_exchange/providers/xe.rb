@@ -32,7 +32,7 @@ module OmniExchange
           req.options.timeout = config[:read_timeout] || OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
           req.options.open_timeout = config[:connect_timeout] || OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
         end
-      rescue Faraday::Error, Faraday::ConnectionFailed => e
+      rescue *EXCEPTIONS => e
         raise e.class, 'xe.com has timed out.'
       end
 
