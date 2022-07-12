@@ -57,7 +57,7 @@ To convert currency and/or get an exchange rate, all you have to do is call `Omn
 What you get back is a hash containing:
 1. converted_amount: (BigDecimal) the amount of money exchanged from the base currency to the target currency
 2. exchange_rate: (BigDecimal) the rate used to calculate the converted_amount
-3. provider_class: (Class) the name of the provider class that supplied the exchange_rate (ie. OmniExchange::OpenExhangeRates)
+3. provider: (Symbol) the provider that supplied the exchange_rate (ie. :open_exchange_rates, :xe)
 
 [For the sake of precise calculation](https://www.bigbinary.com/blog/handling-money-in-ruby), converted_amount and exchange_rate are BigDecimal. Simply call `.to_f` to the results if you'd like to see a number that is easier to read.
 
@@ -67,7 +67,7 @@ Here is an example. Lets say I want to convert $1.00 US Dollar to Japanese Yen, 
 ```ruby
 USD_to_JPY = OmniExchange.get_fx_data(amount: 100, base_currency: 'USD', target_currency: 'JPY', providers: [:open_exchange_rates, :xe])
 
-puts USD_to_JPY # => { :converted_amount=>0.13566633333e3, :exchange_rate=>0.13566633333e1, :provider_class=>OmniExchange::OpenExchangeRates }
+puts USD_to_JPY # => { :converted_amount=>0.13566633333e3, :exchange_rate=>0.13566633333e1, :provider=>:open_exchange_rates }
 
 puts USD_to_JPY[:converted_amount] # => 0.13566633333e3
 puts USD_to_JPY[:converted_amount].to_f # => 135.66633333

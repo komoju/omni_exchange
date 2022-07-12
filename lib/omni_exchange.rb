@@ -49,7 +49,7 @@ module OmniExchange
   #   * :converted_amount [BigDecimal] the amount of money exchanged from the base currency to the target
   #       currency as a BigDecimal for precice calculation. ie. 1, 10, 100
   #   * :exchange_rate [BigDecimal] the rate used to calculate the converted_amount as a BigDecimal. ie. 0.95211e1
-  #   * :provider_class [Class] the provider class that supplied the exchange_rate data. ie. OmniExchange::Xe
+  #   * :provider [Symbol] the provider that supplied the exchange_rate data. ie. :xe, :open_exchange_rates
   #the amount of the base currency exchanged to the target currency using an exchange rate
   #   provided by one of the data providers in the providers hash. The final amount is returned as a BigDecimal
   #   for precise calculation. If all of the providers in the providers hash fail to retrieve data, an exception is raised.
@@ -73,7 +73,7 @@ module OmniExchange
 
       exchanged_amount = rate.to_d * amount.to_d
 
-      return { converted_amount: exchanged_amount, exchange_rate: rate, provider_class: klass }
+      return { converted_amount: exchanged_amount, exchange_rate: rate, provider: OmniExchange::Provider.all.key(klass) }
     rescue Faraday::Error, Faraday::ConnectionFailed, OmniExchange::XeMonthlyLimit => e
       error_messages << e.inspect
     end
