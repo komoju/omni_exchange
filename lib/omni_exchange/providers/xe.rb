@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/AbcSize
 require 'omni_exchange'
 
 module OmniExchange
@@ -37,7 +36,11 @@ module OmniExchange
         raise e.class, 'xe.com has timed out.'
       end
 
-      body = JSON.parse(response.body, symbolize_names: true)
+      begin
+        body = JSON.parse(response.body, symbolize_names: true)
+      rescue JSON::ParserError => e
+        raise e.class, 'JSON::ParserError in OmniExchange::Xe'
+      end
 
       raise OmniExchange::XeMonthlyLimit, 'Xe.com monthly limit has been exceeded' if body[:code] == 3
 
@@ -49,4 +52,3 @@ module OmniExchange
     OmniExchange::Provider.register_provider(:xe, self)
   end
 end
-# rubocop:enable Metrics/AbcSize

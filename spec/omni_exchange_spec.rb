@@ -94,5 +94,21 @@ RSpec.describe OmniExchange do
         expect { response }.to raise_error(OmniExchange::UnknownCurrency)
       end
     end
+
+    context 'when the primary data-provider returns invalid JSON' do
+      let(:response) do
+        VCR.use_cassette('omni_exchange/omni_exchange_invalid_json') { OmniExchange.get_fx_data(amount: 100, base_currency: 'JPY', target_currency: 'KRW', providers: ['xe_invalid_json', :open_exchange_rates]) }
+      end
+
+      it 'converts an amount of one currency to another currency using a secondary data provider' do
+        xe_invalid_json = double OmniExchange::Xe
+        allow(xe_invalid_json).to receive(:get_exchange_rate).and_raise(Faraday::Error, 'slow connection...')
+        allow(OmniExchange::Provider).to receive(:load_provider).with('xe_invalid_json').and_return(xe_invalid_json)
+        allow(OmniExchange::Provider).to receive(:load_provider).with(:open_exchange_rates).and_return(OmniExchange::OpenExchangeRates)
+        allow(xe_invalid_json).to receive(:get_exchange_rate).and_raise(JSON::ParserError, 'bad json...')
+
+        expect(response[:converted_amount]).to be_a(BigDecimal).and eq(0.9550665e3)
+      end
+    end
   end
 end

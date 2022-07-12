@@ -31,7 +31,11 @@ module OmniExchange
         raise e.class, 'Open Exchange Rates has timed out.'
       end
 
-      exchange_rate = JSON.parse(response.body, symbolize_names: true)[:rates][target_currency.to_sym].to_d
+      begin
+        exchange_rate = JSON.parse(response.body, symbolize_names: true)[:rates][target_currency.to_sym].to_d
+      rescue JSON::ParserError => e
+        raise e.class, 'JSON::ParserError in OmniExchange::OpenExchangeRates'
+      end
 
       currency_unit = get_currency_unit(base_currency).to_d
 

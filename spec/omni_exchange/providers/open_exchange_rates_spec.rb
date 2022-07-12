@@ -46,5 +46,13 @@ RSpec.describe OmniExchange::OpenExchangeRates do
         expect { response }.to raise_error(Faraday::ConnectionFailed)
       end
     end
+
+    context 'when JSON from Open Exchange Rates is invalid' do
+      it 'raises a JSON::ParserError' do
+        allow(OmniExchange::OpenExchangeRates).to receive(:get_exchange_rate).and_raise(JSON::ParserError, 'invalid json...')
+
+        expect { response }.to raise_error(JSON::ParserError)
+      end
+    end
   end
 end

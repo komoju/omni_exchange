@@ -59,5 +59,13 @@ RSpec.describe OmniExchange::Xe do
         expect { request }.to raise_error(OmniExchange::XeMonthlyLimit)
       end
     end
+
+    context 'when JSON from Xe.com is invalid' do
+      it 'raises a JSON::ParserError' do
+        allow(OmniExchange::Xe).to receive(:get_exchange_rate).and_raise(JSON::ParserError, 'invalid json...')
+
+        expect { response }.to raise_error(JSON::ParserError)
+      end
+    end
   end
 end
