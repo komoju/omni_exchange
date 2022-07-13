@@ -34,7 +34,7 @@ module OmniExchange
   end
 
   # if a provider raises one of these exceptions, OmniExchange will gracefully attempt to use another provider
-  EXCEPTIONS = [Faraday::Error, Faraday::ConnectionFailed, Faraday::TimeoutError, Net::OpenTimeout, Net::WriteTimeout, Net::ReadTimeout, OpenSSL::SSL::SSLError]
+  EXCEPTIONS = [Faraday::Error, Faraday::ConnectionFailed, Faraday::TimeoutError, Faraday::SSLError, Net::OpenTimeout, Net::WriteTimeout, Net::ReadTimeout, OpenSSL::SSL::SSLError]
 
   module_function
 
