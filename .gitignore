@@ -14,3 +14,4 @@
 .env
 
 sandbox.rb
+*.gem
