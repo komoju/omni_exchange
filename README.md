@@ -57,7 +57,7 @@ To convert currency and/or get an exchange rate, all you have to do is call `Omn
 What you get back is a hash containing:
 1. converted_amount: (BigDecimal) the amount of money exchanged from the base currency to the target currency
 2. exchange_rate: (BigDecimal) the rate used to calculate the converted_amount
-3. fx_rate: (BigDecimal) ????
+3. fx_rate: (BigDecimal) an exchange rate that can be used to convert a formatted version of the base currency (ie. 100 USD being formatted as 1.00)
 4. provider: (Symbol) the provider that supplied the exchange_rate (ie. :open_exchange_rates, :xe)
 
 [For the sake of precise calculation](https://www.bigbinary.com/blog/handling-money-in-ruby), converted_amount and exchange_rate are BigDecimal. Simply call `.to_f` to the results if you'd like to see a number that is easier to read.
