@@ -44,7 +44,7 @@ RSpec.describe OmniExchange do
 
       expect(converted_amount).to be_a(BigDecimal)
       expect(exchange_rate).to be_a(BigDecimal)
-      expect(response).to be_a(Hash).and contain_exactly([:converted_amount, converted_amount], [:exchange_rate, 0.9521811e1], [:provider, :open_exchange_rates])
+      expect(response).to be_a(Hash).and contain_exactly([:converted_amount, converted_amount], [:exchange_rate, 0.9521811e1], [:non_subunit_fx_rate, 0.9521811e1], [:provider, :open_exchange_rates])
     end
 
     context 'when API data is requested from a provider that is not registered in the providers array' do
