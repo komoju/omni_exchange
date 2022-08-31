@@ -53,7 +53,7 @@ module OmniExchange
   #   * :converted_amount [BigDecimal] the amount of money exchanged from the base currency to the target
   #       currency as a BigDecimal for precice calculation. ie. 1, 10, 100
   #   * :exchange_rate [BigDecimal] the rate used to calculate the converted_amount as a BigDecimal. ie. 0.95211e1
-  #   * :fx_rate [BigDecimal] a rate that can be used when a currency with subunits is not in cents . ie. 0.95211e3
+  #   * :non_subunit_fx_rate [BigDecimal] a rate that can be used when a currency with subunits is not in cents . ie. 0.95211e3
   #   * :provider [Symbol] the provider that supplied the exchange_rate data. ie. :xe, :open_exchange_rates
   def get_fx_data(amount:, base_currency:, target_currency:, providers:)
     # if one of the currencies is not valid (ie. 'fake_crypto'), an exception is raised.
@@ -76,7 +76,7 @@ module OmniExchange
 
       exchanged_amount = rate.to_d * amount.to_d
 
-      return { converted_amount: exchanged_amount, exchange_rate: rate, fx_rate: plain_format_rate, provider: OmniExchange::Provider.all.key(klass) }
+      return { converted_amount: exchanged_amount, exchange_rate: rate, non_subunit_fx_rate: plain_format_rate, provider: OmniExchange::Provider.all.key(klass) }
     rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
       error_messages << e.inspect
     end
