@@ -80,7 +80,7 @@ module OmniExchange
     rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
       error_messages << e.inspect
     end
-    
+
     raise OmniExchange::HttpError, "Failed to load #{base_currency}->#{target_currency}:\n#{error_messages.join("\n")}"
   end
 end
