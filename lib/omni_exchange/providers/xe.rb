@@ -26,21 +26,13 @@ module OmniExchange
         f.adapter :net_http
       end
 
-      begin
-        response = api.get do |req|
-          req.url "v1/convert_from.json/?from=#{base_currency}&to=#{target_currency}&amount=#{currency_unit}"
-          req.options.timeout = config[:read_timeout] || OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
-          req.options.open_timeout = config[:connect_timeout] || OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
-        end
-      rescue *EXCEPTIONS => e
-        raise e.class, 'xe.com has timed out.'
+      response = api.get do |req|
+        req.url "v1/convert_from.json/?from=#{base_currency}&to=#{target_currency}&amount=#{currency_unit}"
+        req.options.timeout = config[:read_timeout] || OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
+        req.options.open_timeout = config[:connect_timeout] || OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
       end
 
-      begin
-        body = JSON.parse(response.body, symbolize_names: true)
-      rescue JSON::ParserError => e
-        raise e.class, 'JSON::ParserError in OmniExchange::Xe'
-      end
+      body = JSON.parse(response.body, symbolize_names: true)
 
       raise OmniExchange::XeMonthlyLimit, 'Xe.com monthly limit has been exceeded' if body[:code] == 3
 

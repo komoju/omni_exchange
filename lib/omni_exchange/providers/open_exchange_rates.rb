@@ -21,22 +21,13 @@ module OmniExchange
 
       api = Faraday.new(OmniExchange::OpenExchangeRates::ENDPOINT_URL)
 
-      begin
-        response = api.get do |req|
-          req.url "?app_id=#{app_id}&base=#{base_currency}"
-          req.options.timeout = config[:read_timeout] || OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
-          req.options.open_timeout = config[:connect_timeout] || OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
-        end
-      rescue *EXCEPTIONS => e
-        raise e.class, 'Open Exchange Rates has timed out.'
+      response = api.get do |req|
+        req.url "?app_id=#{app_id}&base=#{base_currency}"
+        req.options.timeout = config[:read_timeout] || OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
+        req.options.open_timeout = config[:connect_timeout] || OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
       end
 
-      begin
-        exchange_rate = JSON.parse(response.body, symbolize_names: true)[:rates][target_currency.to_sym].to_d
-      rescue JSON::ParserError => e
-        raise e.class, 'JSON::ParserError in OmniExchange::OpenExchangeRates'
-      end
-
+      exchange_rate = JSON.parse(response.body, symbolize_names: true)[:rates][target_currency.to_sym].to_d
       currency_unit = get_currency_unit(base_currency).to_d
 
       (exchange_rate * currency_unit).to_d
