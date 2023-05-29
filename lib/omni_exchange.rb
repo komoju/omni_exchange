@@ -34,7 +34,16 @@ module OmniExchange
   end
 
   # if a provider raises one of these exceptions, OmniExchange will gracefully attempt to use another provider
-  EXCEPTIONS = [Faraday::Error, Faraday::ConnectionFailed, Faraday::TimeoutError, Faraday::SSLError, Net::OpenTimeout, Net::WriteTimeout, Net::ReadTimeout, OpenSSL::SSL::SSLError]
+  EXCEPTIONS = [
+    Faraday::Error,
+    Faraday::ConnectionFailed,
+    Faraday::TimeoutError,
+    Faraday::SSLError,
+    Net::OpenTimeout,
+    Net::WriteTimeout,
+    Net::ReadTimeout,
+    OpenSSL::SSL::SSLError
+  ]
 
   module_function
 
@@ -76,12 +85,18 @@ module OmniExchange
 
       exchanged_amount = rate.to_d * amount.to_d
 
-      return { converted_amount: exchanged_amount, exchange_rate: rate, non_subunit_fx_rate: plain_format_rate, provider: OmniExchange::Provider.all.key(klass) }
+      return {
+        converted_amount: exchanged_amount,
+        exchange_rate: rate,
+        non_subunit_fx_rate: plain_format_rate,
+        provider: OmniExchange::Provider.all.key(klass)
+      }
     rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
       error_messages << e.inspect
     end
 
-    raise OmniExchange::HttpError, "Failed to load #{base_currency}->#{target_currency}:\n#{error_messages.join("\n")}"
+    raise OmniExchange::HttpError, "Failed to load #{base_currency}->#{target_currency}:\n" \
+                                   "#{error_messages.join("\n")}"
   end
 end
 # rubocop:enable Lint/Syntax
