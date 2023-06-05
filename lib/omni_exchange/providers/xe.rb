@@ -37,7 +37,7 @@ module OmniExchange
           req.url 'v1/historic_rate.json'
 
           req.params['from'] = base_currency
-          req.params['to'] = target_currencies
+          req.params['to'] = target_currencies.join(',')
           req.params['amount'] = currency_unit
           req.params['date'] = date.strftime('%Y-%m-%d')
         end
