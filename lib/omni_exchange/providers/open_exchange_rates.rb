@@ -4,7 +4,7 @@ require 'omni_exchange'
 
 module OmniExchange
   class OpenExchangeRates < Provider
-    ENDPOINT_URL = 'https://openexchangerates.org/api/latest.json'
+    ENDPOINT_URL = 'https://openexchangerates.org/api/'
 
     class << self
       # This method returns the exchange rate, the rate at which the smallest unit of one currency (the base currency)
@@ -18,21 +18,38 @@ module OmniExchange
       #   if there is a timeout while connecting to xe.com or a timeout while reading Open Exchange Rate's API.
       def get_exchange_rate(base_currency:, target_currency:)
         body = api_get do |req|
+          req.url 'latest.json'
           req.params['base'] = base_currency
         end
 
-        exchange_rate = body[:rates][target_currency.to_sym].to_d
+        exchange_rate = body['rates'][target_currency].to_d
         currency_unit = get_currency_unit(base_currency).to_d
 
         (exchange_rate * currency_unit).to_d
       end
 
+      def get_historic_rate(base_currency:, target_currencies:, date:)
+        body = api_get do |req|
+          req.url "historical/#{date.strftime('%Y-%m-%d')}.json"
+
+          req.params['base'] = base_currency
+          req.params['symbols'] = target_currencies.join(',')
+        end
+
+        currency_unit = get_currency_unit(base_currency).to_d
+        body['rates'].map do |currency, rate|
+          [currency, (rate * currency_unit).to_d]
+        end.to_h
+      end
+
       private
 
-      def api_get
+      def api_get(&blk)
         api = Faraday.new(OmniExchange::OpenExchangeRates::ENDPOINT_URL)
 
         response = api.get do |req|
+          blk.call(req)
+
           req.params['app_id'] = config[:app_id]
 
           req.options.timeout = config[:read_timeout] ||
@@ -41,7 +58,7 @@ module OmniExchange
                                      OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
         end
 
-        JSON.parse(response.body, symbolize_names: true)
+        JSON.parse(response.body)
       end
 
       def config
