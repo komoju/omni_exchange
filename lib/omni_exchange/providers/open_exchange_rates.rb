@@ -20,6 +20,7 @@ module OmniExchange
         body = api_get do |req|
           req.url 'latest.json'
           req.params['base'] = base_currency
+          req.params['symbols'] = target_currency
         end
 
         exchange_rate = body['rates'][target_currency].to_d
