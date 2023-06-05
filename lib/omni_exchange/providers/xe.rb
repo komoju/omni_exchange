@@ -26,6 +26,26 @@ module OmniExchange
         body[:to][0][:mid].to_d
       end
 
+      def get_historic_rate(base_currency:, target_currencies:, date:)
+        currency_unit = get_currency_unit(base_currency)
+
+        body = api_get do |req|
+          req.url 'v1/historic_rate.json'
+
+          req.params['from'] = base_currency
+          req.params['to'] = target_currencies
+          req.params['amount'] = currency_unit
+          req.params['date'] = date.strftime('%Y-%m-%d')
+        end
+
+        rates = {}
+        body[:to].each do |rate|
+          rates[rate[:quotecurrency]] = rate[:mid].to_d
+        end
+
+        rates
+      end
+
       private
 
       def api_get(&blk)
