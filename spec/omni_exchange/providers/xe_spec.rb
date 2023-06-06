@@ -23,9 +23,11 @@ RSpec.describe OmniExchange::Xe do
     end
   end
 
-  context 'self.get_exchange_rate' do
+  describe '.get_exchange_rate' do
     let(:response) do
-      VCR.use_cassette('omni_exchange/xe_unregistered_provider', record: :new_episodes) { subject.get_exchange_rate(base_currency: 'JPY', target_currency: 'KRW') }
+      VCR.use_cassette('omni_exchange/xe_unregistered_provider', record: :new_episodes) do
+        subject.get_exchange_rate(base_currency: 'JPY', target_currency: 'KRW')
+      end
     end
 
     it 'sets "amount_to_multiply_exchange_rate_by" correctly for currencies that use cents' do
