@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://xecdapi.xe.com/v1/historic_rate.json?amount=0.01&date=2018-01-01&from=USD&to=EUR%2CJPY%2CKRW
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.2
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      date:
+      - Tue, 06 Jun 2023 06:51:24 GMT
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '284'
+      connection:
+      - keep-alive
+      access-control-allow-origin:
+      - "*"
+      x-ratelimit-limit:
+      - '900'
+      x-ratelimit-remaining:
+      - '899'
+      x-ratelimit-reset:
+      - '1686034800'
+      x-raterequest-limit:
+      - '30000'
+      x-raterequest-remaining:
+      - '21504'
+      x-raterequest-reset:
+      - '1688169600'
+      x-request-id:
+      - 25bb7edb-c26a-49cd-9f5d-220bec0c4e2a
+    body:
+      encoding: UTF-8
+      string: '{"terms":"http://www.xe.com/legal/dfs.php","privacy":"http://www.xe.com/privacy.php","from":"USD","amount":0.01,"timestamp":"2018-01-01T00:00:00Z","to":[{"quotecurrency":"EUR","mid":0.0083317565},{"quotecurrency":"JPY","mid":1.1270502279},{"quotecurrency":"KRW","mid":10.6626496918}]}'
+  recorded_at: Tue, 06 Jun 2023 06:51:25 GMT
+recorded_with: VCR 6.1.0

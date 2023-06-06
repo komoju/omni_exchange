@@ -70,14 +70,18 @@ RSpec.describe OmniExchange::Xe do
   end
 
   describe '.get_historic_rate' do
-    it 'returns the exchange rate from the date specified' do
+    it 'returns the exchange rates from the date specified' do
       VCR.use_cassette('omni_exchange/xe_historic_rate', record: :new_episodes) do
         rate = subject.get_historic_rate(base_currency: 'USD',
-                                         target_currencies: ['EUR'],
+                                         target_currencies: ['EUR', 'JPY', 'KRW'],
                                          date: Date.new(2018, 01, 01)
                                         )
 
-        expect(rate['EUR']).to eq(0.8331756500000001e-2)
+        expect(rate).to eq({
+          'EUR' => 0.8331756500000001e-2,
+          'JPY' => 0.11270502279e1,
+          'KRW' => 0.106626496918e2,
+        })
       end
     end
   end
