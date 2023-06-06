@@ -5,8 +5,6 @@ require 'pry'
 
 RSpec.describe OmniExchange::Xe do
   subject(:xe) { OmniExchange::Xe }
-  let(:xe_api_id) { ENV['XE_API_ID'] }
-  let(:xe_api_key) { ENV['XE_API_KEY'] }
   let(:xe_read_timeout) { nil }
   let(:xe_connect_timeout) { nil }
 
@@ -16,8 +14,8 @@ RSpec.describe OmniExchange::Xe do
         xe: {
           read_timeout: xe_read_timeout,
           connect_timeout: xe_connect_timeout,
-          api_id: 'test',
-          api_key: 'test'
+          api_id: ENV['XE_API_ID'],
+          api_key: ENV['XE_API_KEY']
         }
       }
     end
@@ -67,6 +65,19 @@ RSpec.describe OmniExchange::Xe do
         allow(OmniExchange::Xe).to receive(:get_exchange_rate).and_raise(JSON::ParserError, 'invalid json...')
 
         expect { response }.to raise_error(JSON::ParserError)
+      end
+    end
+  end
+
+  describe '.get_historic_rate' do
+    it 'returns the exchange rate from the date specified' do
+      VCR.use_cassette('omni_exchange/xe_historic_rate', record: :new_episodes) do
+        rate = subject.get_historic_rate(base_currency: 'USD',
+                                         target_currencies: ['EUR'],
+                                         date: Date.new(2018, 01, 01)
+                                        )
+
+        expect(rate['EUR']).to eq(0.8331756500000001e-2)
       end
     end
   end
