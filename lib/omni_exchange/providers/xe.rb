@@ -30,6 +30,13 @@ module OmniExchange
         body[:to][0][:mid].to_d
       end
 
+      # This method returns the historic exchange rate for multiple currencies for a given date.
+      #
+      # @param base_currency: [String] the ISO Currency Code of the currency that you're exchanging from.
+      #                                ie. "USD", "JPY"
+      # @param target_currencies: [Array] an array of ISO Currency Codes of the currencies that you're
+      #                                   exchanging to. ie. ["EUR", "KRW"]
+      # @param date: [Date] the date for which you want the historic exchange rate.
       def get_historic_rate(base_currency:, target_currencies:, date:)
         currency_unit = get_currency_unit(base_currency)
 
@@ -56,8 +63,10 @@ module OmniExchange
         response = api.get do |req|
           blk.call(req)
 
-          req.options.timeout = config[:read_timeout] || OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
-          req.options.open_timeout = config[:connect_timeout] || OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
+          req.options.timeout = config[:read_timeout] ||
+                                OmniExchange::Configuration::DEFAULT_READ_TIMEOUT
+          req.options.open_timeout = config[:connect_timeout] ||
+                                     OmniExchange::Configuration::DEFAULT_CONNECTION_TIMEOUT
         end
 
         body = JSON.parse(response.body, symbolize_names: true)
