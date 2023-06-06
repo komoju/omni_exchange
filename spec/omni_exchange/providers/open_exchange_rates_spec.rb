@@ -6,7 +6,7 @@ RSpec.describe OmniExchange::OpenExchangeRates do
   subject(:open_exchange_rates) { OmniExchange::OpenExchangeRates }
   let(:open_exchange_rates_read_timeout) { nil }
   let(:open_exchange_rates_connect_timeout) { nil }
-  let(:open_exchange_app_id) { ENV['OPEN_EXCHANGE_RATES_APP_ID'] }
+  let(:open_exchange_app_id) { ENV['OPEN_EXCHANGE_RATES_APP_ID'] || '<app_id>' }
 
   before do
     OmniExchange.configure do |config|
@@ -14,17 +14,19 @@ RSpec.describe OmniExchange::OpenExchangeRates do
         open_exchange_rates: {
           read_timeout: open_exchange_rates_read_timeout,
           connect_timeout: open_exchange_rates_read_timeout,
-          app_id: 'test'
+          app_id: open_exchange_app_id
         }
       }
     end
   end
 
-  context 'self.get_exchange_rate' do
+  describe '.get_exchange_rate' do
     let(:open_exchange_rates_read_timeout) { 0 }
     let(:open_exchange_rates_connect_timeout) { 0 }
     let(:response) do
-      VCR.use_cassette('omni_exchange/open_exchange_rates_unregistered_provider', record: :new_episodes) { subject.get_exchange_rate(base_currency: 'USD', target_currency: 'JPY') }
+      VCR.use_cassette('omni_exchange/open_exchange_rates_unregistered_provider', record: :new_episodes) do
+        subject.get_exchange_rate(base_currency: 'USD', target_currency: 'JPY')
+      end
     end
 
     it 'sets "amount_to_multiply_exchange_rate_by" correctly for currencies that use cents' do
@@ -49,7 +51,8 @@ RSpec.describe OmniExchange::OpenExchangeRates do
 
     context 'when JSON from Open Exchange Rates is invalid' do
       it 'raises a JSON::ParserError' do
-        allow(OmniExchange::OpenExchangeRates).to receive(:get_exchange_rate).and_raise(JSON::ParserError, 'invalid json...')
+        allow(OmniExchange::OpenExchangeRates).to receive(:get_exchange_rate).
+          and_raise(JSON::ParserError, 'invalid json...')
 
         expect { response }.to raise_error(JSON::ParserError)
       end
