@@ -51,8 +51,8 @@ RSpec.describe OmniExchange::OpenExchangeRates do
 
     context 'when JSON from Open Exchange Rates is invalid' do
       it 'raises a JSON::ParserError' do
-        allow(OmniExchange::OpenExchangeRates).to receive(:get_exchange_rate).
-          and_raise(JSON::ParserError, 'invalid json...')
+        allow(OmniExchange::OpenExchangeRates).to receive(:get_exchange_rate)
+          .and_raise(JSON::ParserError, 'invalid json...')
 
         expect { response }.to raise_error(JSON::ParserError)
       end
@@ -63,15 +63,14 @@ RSpec.describe OmniExchange::OpenExchangeRates do
     it 'returns the exchange rates from the date specified' do
       VCR.use_cassette('omni_exchange/open_exchange_rates_historic_rate') do
         rate = subject.get_historic_rate(base_currency: 'USD',
-                                         target_currencies: ['EUR', 'JPY', 'KRW'],
-                                         date: Date.new(2018, 01, 01)
-                                        )
+                                         target_currencies: %w[EUR JPY KRW],
+                                         date: Date.new(2018, 1, 1))
 
         expect(rate).to eq({
-          'EUR' => BigDecimal('0.832586e-2'),
-          'JPY' => BigDecimal('0.1127745e1'),
-          'KRW' => BigDecimal('0.106625e2'),
-        })
+                             'EUR' => BigDecimal('0.832586e-2'),
+                             'JPY' => BigDecimal('0.1127745e1'),
+                             'KRW' => BigDecimal('0.106625e2')
+                           })
       end
     end
   end

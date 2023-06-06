@@ -20,7 +20,7 @@ module OmniExchange
         currency_unit = get_currency_unit(base_currency)
 
         body = api_get do |req|
-          req.url "v1/convert_from.json"
+          req.url 'v1/convert_from.json'
 
           req.params['from'] = base_currency
           req.params['to'] = target_currency

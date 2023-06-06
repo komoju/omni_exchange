@@ -36,7 +36,7 @@ module OmniExchange
 
     # Each provider class should inherit from Provider and have a .get_exchange_rates method. If a provider class
     #   doesn't have a .get_exchange_rates method, the method below will be called and an error will be raised.
-    def self.get_exchange_rate(base_currency:, target_currency:)
+    def self.get_exchange_rate(base_currency:, target_currency:) # rubocop:disable Lint/UnusedMethodArgument
       raise 'method not implemented...'
     end
 

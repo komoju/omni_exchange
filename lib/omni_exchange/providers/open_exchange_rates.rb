@@ -38,9 +38,9 @@ module OmniExchange
         end
 
         currency_unit = get_currency_unit(base_currency).to_d
-        body['rates'].map do |currency, rate|
-          [currency, (rate * currency_unit).to_d]
-        end.to_h
+        body['rates'].transform_values do |rate|
+          (rate * currency_unit).to_d
+        end
       end
 
       private
