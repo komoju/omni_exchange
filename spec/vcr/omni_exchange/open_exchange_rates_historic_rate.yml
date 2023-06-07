@@ -2,13 +2,13 @@
 http_interactions:
 - request:
     method: get
-    uri: https://openexchangerates.org/api/latest.json?app_id=test&base=JPY&symbols=KRW
+    uri: https://openexchangerates.org/api/historical/2018-01-01.json?app_id=<app_id>&base=USD&symbols=EUR%2CJPY%2CKRW
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v0.17.4
+      - Faraday v1.10.2
   response:
     status:
       code: 200
@@ -21,30 +21,30 @@ http_interactions:
       content-type:
       - application/json; charset=utf-8
       date:
-      - Thu, 30 Jun 2022 08:10:33 GMT
+      - Tue, 06 Jun 2023 09:06:47 GMT
       etag:
-      - W/"042d0549d4781a76e0fe312f51dcbb4d"
+      - '"e4c4b5fbd4c9c8624f82f29dd68c4f58"'
       last-modified:
-      - Thu, 30 Jun 2022 08:10:00 GMT
+      - Mon, 01 Jan 2018 23:59:59 GMT
       server:
       - nginx/1.12.2
-      vary:
-      - Accept-Encoding
       content-length:
-      - '1542'
+      - '258'
       connection:
-      - Close
+      - keep-alive
     body:
-      encoding: ASCII-8BIT
+      encoding: UTF-8
       string: |-
         {
           "disclaimer": "Usage subject to terms: https://openexchangerates.org/terms",
           "license": "https://openexchangerates.org/license",
-          "timestamp": 1656576600,
-          "base": "JPY",
+          "timestamp": 1514851199,
+          "base": "USD",
           "rates": {
-            "KRW": 9.521811
+            "EUR": 0.832586,
+            "JPY": 112.7745,
+            "KRW": 1066.25
           }
         }
-  recorded_at: Thu, 30 Jun 2022 08:10:33 GMT
+  recorded_at: Tue, 06 Jun 2023 09:06:47 GMT
 recorded_with: VCR 6.1.0

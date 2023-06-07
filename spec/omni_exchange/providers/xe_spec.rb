@@ -5,8 +5,6 @@ require 'pry'
 
 RSpec.describe OmniExchange::Xe do
   subject(:xe) { OmniExchange::Xe }
-  let(:xe_api_id) { ENV['XE_API_ID'] }
-  let(:xe_api_key) { ENV['XE_API_KEY'] }
   let(:xe_read_timeout) { nil }
   let(:xe_connect_timeout) { nil }
 
@@ -16,16 +14,18 @@ RSpec.describe OmniExchange::Xe do
         xe: {
           read_timeout: xe_read_timeout,
           connect_timeout: xe_connect_timeout,
-          api_id: 'test',
-          api_key: 'test'
+          api_id: ENV['XE_API_ID'],
+          api_key: ENV['XE_API_KEY']
         }
       }
     end
   end
 
-  context 'self.get_exchange_rate' do
+  describe '.get_exchange_rate' do
     let(:response) do
-      VCR.use_cassette('omni_exchange/xe_unregistered_provider', record: :new_episodes) { subject.get_exchange_rate(base_currency: 'JPY', target_currency: 'KRW') }
+      VCR.use_cassette('omni_exchange/xe_unregistered_provider', record: :new_episodes) do
+        subject.get_exchange_rate(base_currency: 'JPY', target_currency: 'KRW')
+      end
     end
 
     it 'sets "amount_to_multiply_exchange_rate_by" correctly for currencies that use cents' do
@@ -65,6 +65,22 @@ RSpec.describe OmniExchange::Xe do
         allow(OmniExchange::Xe).to receive(:get_exchange_rate).and_raise(JSON::ParserError, 'invalid json...')
 
         expect { response }.to raise_error(JSON::ParserError)
+      end
+    end
+  end
+
+  describe '.get_historic_rate' do
+    it 'returns the exchange rates from the date specified' do
+      VCR.use_cassette('omni_exchange/xe_historic_rate') do
+        rate = subject.get_historic_rate(base_currency: 'USD',
+                                         target_currencies: %w[EUR JPY KRW],
+                                         date: Date.new(2018, 1, 1))
+
+        expect(rate).to eq({
+                             'EUR' => BigDecimal('0.83317565e-2'),
+                             'JPY' => BigDecimal('0.11270502279e1'),
+                             'KRW' => BigDecimal('0.106626496918e2')
+                           })
       end
     end
   end

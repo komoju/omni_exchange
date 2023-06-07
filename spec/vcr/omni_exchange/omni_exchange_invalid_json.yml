@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://openexchangerates.org/api/latest.json?app_id=test&base=JPY
+    uri: https://openexchangerates.org/api/latest.json?app_id=test&base=JPY&symbols=KRW
     body:
       encoding: US-ASCII
       string: ''
