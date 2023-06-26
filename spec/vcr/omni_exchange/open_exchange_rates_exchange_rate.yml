@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://openexchangerates.org/api/latest.json?app_id=test&base=USD&symbols=EUR
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - public
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Mon, 26 Jun 2023 09:01:17 GMT
+      etag:
+      - '"22b39fe960f9b1002849bb1254e58abe"'
+      last-modified:
+      - Mon, 26 Jun 2023 09:00:00 GMT
+      server:
+      - nginx/1.12.2
+      content-length:
+      - '217'
+      connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "disclaimer": "Usage subject to terms: https://openexchangerates.org/terms",
+          "license": "https://openexchangerates.org/license",
+          "timestamp": 1687770000,
+          "base": "USD",
+          "rates": {
+            "EUR": 0.918119
+          }
+        }
+  recorded_at: Mon, 26 Jun 2023 09:01:18 GMT
+recorded_with: VCR 6.1.0
