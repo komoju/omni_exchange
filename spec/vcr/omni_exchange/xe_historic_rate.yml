@@ -42,4 +42,46 @@ http_interactions:
       encoding: UTF-8
       string: '{"terms":"http://www.xe.com/legal/dfs.php","privacy":"http://www.xe.com/privacy.php","from":"USD","amount":0.01,"timestamp":"2018-01-01T00:00:00Z","to":[{"quotecurrency":"EUR","mid":0.0083317565},{"quotecurrency":"JPY","mid":1.1270502279},{"quotecurrency":"KRW","mid":10.6626496918}]}'
   recorded_at: Tue, 06 Jun 2023 06:51:25 GMT
+- request:
+    method: get
+    uri: https://xecdapi.xe.com/v1/historic_rate.json?amount=0.01&date=2017-01-01&from=USD&to=JPY%2CKRW%2CEUR
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      date:
+      - Mon, 26 Jun 2023 06:27:57 GMT
+      content-type:
+      - application/json; charset=utf-8
+      content-length:
+      - '271'
+      connection:
+      - keep-alive
+      access-control-allow-origin:
+      - "*"
+      x-ratelimit-limit:
+      - '900'
+      x-ratelimit-remaining:
+      - '899'
+      x-ratelimit-reset:
+      - '1687761000'
+      x-raterequest-limit:
+      - '30000'
+      x-raterequest-remaining:
+      - '28142'
+      x-raterequest-reset:
+      - '1690848000'
+      x-request-id:
+      - 93a82c13-e3f2-4db4-a17e-a7014e5b9642
+    body:
+      encoding: UTF-8
+      string: '{"terms":"http://www.xe.com/legal/dfs.php","privacy":"http://www.xe.com/privacy.php","from":"USD","amount":0.01,"timestamp":"2017-01-01T00:00:00Z","to":[{"quotecurrency":"EUR","mid":0.0095034},{"quotecurrency":"JPY","mid":1.169695},{"quotecurrency":"KRW","mid":12.0726}]}'
+  recorded_at: Mon, 26 Jun 2023 06:27:57 GMT
 recorded_with: VCR 6.1.0
