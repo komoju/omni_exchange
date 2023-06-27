@@ -133,6 +133,8 @@ module OmniExchange
   #  ie. "USD", "JPY"
   # @param target_currency: [String] the ISO Currency Code of the currency that you're exchanging to.
   #  ie. "EUR", "KRW"
+  # @param date: [Date] the specific date you want a historic exchange rate for.
+  # ie. Date.new(2018, 12, 25)
   # @param providers: [Array] an array of symbols of the providers that will be used to get exchange rates API
   #   data. The symbols must be found in the @providers hash in the Provider class (lib/omni_exchange/provider.rb).
   #   ie. xe:, :open_exchange_rates
