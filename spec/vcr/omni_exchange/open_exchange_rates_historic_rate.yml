@@ -47,4 +47,51 @@ http_interactions:
           }
         }
   recorded_at: Tue, 06 Jun 2023 09:06:47 GMT
+- request:
+    method: get
+    uri: https://openexchangerates.org/api/historical/2017-01-01.json?app_id=test&base=USD&symbols=JPY%2CKRW%2CEUR
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.10.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - public
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Mon, 26 Jun 2023 06:48:21 GMT
+      etag:
+      - '"98dce48bcd2e38dd01ed479b021874e5"'
+      last-modified:
+      - Sun, 01 Jan 2017 23:59:55 GMT
+      server:
+      - nginx/1.12.2
+      content-length:
+      - '262'
+      connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "disclaimer": "Usage subject to terms: https://openexchangerates.org/terms",
+          "license": "https://openexchangerates.org/license",
+          "timestamp": 1483315167,
+          "base": "USD",
+          "rates": {
+            "EUR": 0.949713,
+            "JPY": 116.82243628,
+            "KRW": 1206.45
+          }
+        }
+  recorded_at: Mon, 26 Jun 2023 06:48:21 GMT
 recorded_with: VCR 6.1.0

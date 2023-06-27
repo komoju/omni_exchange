@@ -98,5 +98,64 @@ module OmniExchange
     raise OmniExchange::HttpError, "Failed to load #{base_currency}->#{target_currency}:\n" \
                                    "#{error_messages.join("\n")}"
   end
+
+  # returns the latest foreign exchange rate from the base currency to the target currency.
+  #
+  # @param base_currency: [String] the ISO Currency Code of the currency that you're exchanging from.
+  #  ie. "USD", "JPY"
+  # @param target_currency: [String] the ISO Currency Code of the currency that you're exchanging to.
+  #  ie. "EUR", "KRW"
+  # @param providers: [Array] an array of symbols of the providers that will be used to get exchange rates API
+  #   data. The symbols must be found in the @providers hash in the Provider class (lib/omni_exchange/provider.rb).
+  #   ie. xe:, :open_exchange_rates
+  # @ return [BigDecimal] an exchange rate is returned as a BigDecimal for precise calculation since this exchange
+  #   rate will be used to calculate an convert an exchange of currencies.
+  def get_exchange_rate(base_currency:, target_currency:, providers:)
+    provider_classes = providers.map { |p| OmniExchange::Provider.load_provider(p) }
+
+    error_messages = []
+
+    provider_classes.each do |klass|
+      return klass.get_exchange_rate(base_currency: base_currency,
+                                     target_currency: target_currency)
+
+    rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
+      error_messages << e.inspect
+    end
+
+    raise OmniExchange::HttpError, "Failed to get historic rate:\n" \
+                                   "#{error_messages.join("\n")}"
+  end
+
+  # returns the historic exchange rate from the base currency to the target currency at a certain date.
+  #
+  # @param base_currency: [String] the ISO Currency Code of the currency that you're exchanging from.
+  #  ie. "USD", "JPY"
+  # @param target_currency: [String] the ISO Currency Code of the currency that you're exchanging to.
+  #  ie. "EUR", "KRW"
+  # @param date: [Date] the specific date you want a historic exchange rate for.
+  # ie. Date.new(2018, 12, 25)
+  # @param providers: [Array] an array of symbols of the providers that will be used to get exchange rates API
+  #   data. The symbols must be found in the @providers hash in the Provider class (lib/omni_exchange/provider.rb).
+  #   ie. xe:, :open_exchange_rates
+  #
+  # @ return [Hash]: A hash containing the exchange rates.
+  def get_historic_rate(base_currency:, target_currencies:, date:, providers:)
+    provider_classes = providers.map { |p| OmniExchange::Provider.load_provider(p) }
+
+    error_messages = []
+
+    provider_classes.each do |klass|
+      return klass.get_historic_rate(base_currency: base_currency,
+                                    target_currencies: target_currencies,
+                                    date: date)
+
+    rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
+      error_messages << e.inspect
+    end
+
+    raise OmniExchange::HttpError, "Failed to get historic rate:\n" \
+                                   "#{error_messages.join("\n")}"
+  end
 end
 # rubocop:enable Lint/Syntax
