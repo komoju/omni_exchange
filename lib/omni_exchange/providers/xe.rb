@@ -24,7 +24,7 @@ module OmniExchange
 
           req.params['from'] = base_currency
           req.params['to'] = target_currency
-          req.params['amount'] = currency_unit
+          req.params['amount'] = 1
         end
 
         body[:to][0][:mid].to_d
