@@ -110,9 +110,9 @@ RSpec.describe OmniExchange do
         rates = response[:rates]
         expect(rates.keys).to match_array(%w[JPY KRW EUR])
 
-        expect(rates['JPY']).to eq(0.1169695e1)
-        expect(rates['KRW']).to eq(0.120726e2)
-        expect(rates['EUR']).to eq(0.95034e-2)
+        expect(rates['JPY']).to eq(BigDecimal('116.9695'))
+        expect(rates['KRW']).to eq(BigDecimal('1207.26'))
+        expect(rates['EUR']).to eq(BigDecimal('0.95034'))
       end
     end
 
