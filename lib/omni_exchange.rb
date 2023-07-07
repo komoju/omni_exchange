@@ -116,14 +116,19 @@ module OmniExchange
     error_messages = []
 
     provider_classes.each do |klass|
-      return klass.get_exchange_rate(base_currency: base_currency,
+      rate = klass.get_exchange_rate(base_currency: base_currency,
                                      target_currency: target_currency)
+
+      return {
+        rate: rate,
+        provider: OmniExchange::Provider.all.key(klass)
+      }
 
     rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
       error_messages << e.inspect
     end
 
-    raise OmniExchange::HttpError, "Failed to get historic rate:\n" \
+    raise OmniExchange::HttpError, "Failed to get exchange rate:\n" \
                                    "#{error_messages.join("\n")}"
   end
 
@@ -146,9 +151,14 @@ module OmniExchange
     error_messages = []
 
     provider_classes.each do |klass|
-      return klass.get_historic_rate(base_currency: base_currency,
-                                    target_currencies: target_currencies,
-                                    date: date)
+      rates = klass.get_historic_rate(base_currency: base_currency,
+                                      target_currencies: target_currencies,
+                                      date: date)
+
+      return {
+        rates: rates,
+        provider: OmniExchange::Provider.all.key(klass)
+      }
 
     rescue *EXCEPTIONS, OmniExchange::XeMonthlyLimit, JSON::ParserError => e
       error_messages << e.inspect

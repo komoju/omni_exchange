@@ -77,9 +77,9 @@ RSpec.describe OmniExchange::Xe do
                                          date: Date.new(2018, 1, 1))
 
         expect(rate).to eq({
-                             'EUR' => BigDecimal('0.83317565e-2'),
-                             'JPY' => BigDecimal('0.11270502279e1'),
-                             'KRW' => BigDecimal('0.106626496918e2')
+                             'EUR' => BigDecimal('0.8331756502'),
+                             'JPY' => BigDecimal('112.7050227918'),
+                             'KRW' => BigDecimal('1066.2649691784')
                            })
       end
     end

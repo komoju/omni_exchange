@@ -42,7 +42,10 @@ RSpec.describe OmniExchange do
                                                   target_currency: 'EUR',
                                                   providers: [:open_exchange_rates, :xe])
 
-        expect(response).to eq(BigDecimal('0.918119e-2'))
+        expect(response).to eq(
+          provider: :open_exchange_rates,
+          rate: BigDecimal('0.918119')
+        )
       end
     end
 
@@ -63,7 +66,10 @@ RSpec.describe OmniExchange do
                                                   target_currency: 'EUR',
                                                   providers: [:slow_xe, :open_exchange_rates])
 
-        expect(response).to eq(BigDecimal('0.918119e-2'))
+        expect(response).to eq(
+          provider: :open_exchange_rates,
+          rate: BigDecimal('0.918119')
+        )
       end
     end
 
@@ -99,11 +105,14 @@ RSpec.describe OmniExchange do
                                                   target_currencies: %w[JPY KRW EUR],
                                                   providers: [:xe, :open_exchange_rates])
 
-        expect(response.keys).to match_array(%w[JPY KRW EUR])
+        expect(response[:provider]).to eq(:xe)
 
-        expect(response['JPY']).to eq(0.1169695e1)
-        expect(response['KRW']).to eq(0.120726e2)
-        expect(response['EUR']).to eq(0.95034e-2)
+        rates = response[:rates]
+        expect(rates.keys).to match_array(%w[JPY KRW EUR])
+
+        expect(rates['JPY']).to eq(BigDecimal('116.9695'))
+        expect(rates['KRW']).to eq(BigDecimal('1207.26'))
+        expect(rates['EUR']).to eq(BigDecimal('0.95034'))
       end
     end
 
@@ -126,11 +135,14 @@ RSpec.describe OmniExchange do
                                                   target_currencies: %w[JPY KRW EUR],
                                                   providers: [:slow_xe, :open_exchange_rates])
 
-        expect(response.keys).to match_array(%w[JPY KRW EUR])
+        expect(response[:provider]).to eq(:open_exchange_rates)
 
-        expect(response['JPY']).to eq(BigDecimal('0.11682243628e1'))
-        expect(response['KRW']).to eq(BigDecimal('0.120645e2'))
-        expect(response['EUR']).to eq(BigDecimal('0.949713e-2'))
+        rates = response[:rates]
+        expect(rates.keys).to match_array(%w[JPY KRW EUR])
+
+        expect(rates['JPY']).to eq(BigDecimal('116.82243628'))
+        expect(rates['KRW']).to eq(BigDecimal('1206.45'))
+        expect(rates['EUR']).to eq(BigDecimal('0.949713'))
       end
     end
 

@@ -23,10 +23,7 @@ module OmniExchange
           req.params['symbols'] = target_currency
         end
 
-        exchange_rate = body['rates'][target_currency].to_d
-        currency_unit = get_currency_unit(base_currency).to_d
-
-        (exchange_rate * currency_unit).to_d
+        body['rates'][target_currency].to_d
       end
 
       def get_historic_rate(base_currency:, target_currencies:, date:)
@@ -37,10 +34,7 @@ module OmniExchange
           req.params['symbols'] = target_currencies.join(',')
         end
 
-        currency_unit = get_currency_unit(base_currency).to_d
-        body['rates'].transform_values do |rate|
-          (rate * currency_unit).to_d
-        end
+        body['rates']
       end
 
       private

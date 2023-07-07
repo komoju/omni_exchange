@@ -17,14 +17,12 @@ module OmniExchange
       #   rate will be used to calculate an convert an exchange of currencies. However, an exception will be raised
       #   if there is a timeout while connecting to xe.com or a timeout while reading xe.com's API.
       def get_exchange_rate(base_currency:, target_currency:)
-        currency_unit = get_currency_unit(base_currency)
-
         body = api_get do |req|
           req.url 'v1/convert_from.json'
 
           req.params['from'] = base_currency
           req.params['to'] = target_currency
-          req.params['amount'] = currency_unit
+          req.params['amount'] = 1
         end
 
         body[:to][0][:mid].to_d
@@ -38,14 +36,12 @@ module OmniExchange
       #                                   exchanging to. ie. ["EUR", "KRW"]
       # @param date: [Date] the date for which you want the historic exchange rate.
       def get_historic_rate(base_currency:, target_currencies:, date:)
-        currency_unit = get_currency_unit(base_currency)
-
         body = api_get do |req|
           req.url 'v1/historic_rate.json'
 
           req.params['from'] = base_currency
           req.params['to'] = target_currencies.join(',')
-          req.params['amount'] = currency_unit
+          req.params['amount'] = 1
           req.params['date'] = date.strftime('%Y-%m-%d')
         end
 
