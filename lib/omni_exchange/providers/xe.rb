@@ -77,7 +77,7 @@ module OmniExchange
         api_key = config[:api_key]
 
         Faraday.new(OmniExchange::Xe::ENDPOINT_URL) do |f|
-          f.request :basic_auth, api_id, api_key
+          f.set_basic_auth api_id, api_key
           f.adapter :net_http
         end
       end
