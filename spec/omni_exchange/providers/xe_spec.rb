@@ -74,7 +74,7 @@ RSpec.describe OmniExchange::Xe do
       VCR.use_cassette('omni_exchange/xe_historic_rate') do
         rate = subject.get_historic_rate(base_currency: 'USD',
                                          target_currencies: %w[EUR JPY KRW],
-                                         date: Date.new(2018, 1, 1))
+                                         date: Date.new(2017, 1, 1))
 
         expect(rate).to eq({
                              'EUR' => BigDecimal('0.8331756502'),
