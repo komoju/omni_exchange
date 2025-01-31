@@ -2,7 +2,7 @@
 
 require 'omni_exchange/provider'
 # in order to make sure that all API data providers are registered correctly,
-#   all of the provider files in the providers folder must be required
+# all of the provider files in the providers folder must be required
 require 'omni_exchange/providers/open_exchange_rates'
 require 'omni_exchange/providers/xe'
 require 'omni_exchange/version'
@@ -11,7 +11,7 @@ require 'omni_exchange/error'
 require 'faraday'
 require 'money'
 require 'json'
-require 'bigdecimal/util'
+require 'bigdecimal'
 require 'net/http'
 
 # rubocop:disable Lint/Syntax
