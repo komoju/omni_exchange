@@ -28,12 +28,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'base64', '~> 0.2.0'
+  spec.add_dependency 'bigdecimal', '~> 3'
   spec.add_dependency 'faraday', '~> 2'
   spec.add_dependency 'money', '~> 6.13.1'
-  spec.add_dependency 'bigdecimal', '~> 3'
-  spec.add_dependency 'stringio', '~> 3.1.2'
   spec.add_dependency 'racc', '~> 1.4'
-  spec.add_dependency 'base64', '~> 0.2.0'
+  spec.add_dependency 'stringio', '~> 3.1.2'
 
   spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'pry'
