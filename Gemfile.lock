@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omni_exchange (2.1.0)
+    omni_exchange (3.0.0)
       base64 (~> 0.2.0)
       bigdecimal (~> 3)
       faraday (~> 2)
