@@ -7,8 +7,6 @@ http_interactions:
       encoding: US-ASCII
       string: ''
     headers:
-      Authorization:
-      - Basic ZGVnaWNhY28uLGx0ZC43MzM5MjYyNDQ6bzhzMWtyZjkyZDA3Mm83Ymw2aG1qMGZqdmE=
       User-Agent:
       - Faraday v2.12.2
   response:
