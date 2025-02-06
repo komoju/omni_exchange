@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'OmniExchange converts currencies using up-to-the-minute foreign exchange rates.'
   spec.homepage      = 'https://degica.com'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 3.0.1')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.1')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
