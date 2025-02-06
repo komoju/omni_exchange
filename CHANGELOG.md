@@ -13,5 +13,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated XE endpoint_url to use an alternative one as per their recommendation.
 - Added dependencies and updated requires that were using ruby's standard library no longer supported since Ruby 3.0.0
-- Updated workflow to account for different ruby versions.
-- Updated minimum required ruby version as per the newly added workflow.
+- Supports Ruby versions 3.1, 3.2, 3.3, and 3.4.
