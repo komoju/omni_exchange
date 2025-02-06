@@ -4,7 +4,7 @@ require 'omni_exchange'
 
 module OmniExchange
   class Xe < Provider
-    ENDPOINT_URL = 'https://xecdapi.xe.com/'
+    ENDPOINT_URL = 'https://xecd-api-ssl.xe.com/'
 
     class << self
       # This method returns the exchange rate, the rate at which the smallest unit of one currency (the base currency)

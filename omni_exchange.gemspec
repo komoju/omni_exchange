@@ -2,6 +2,7 @@
 
 require_relative 'lib/omni_exchange/version'
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   spec.name          = 'omni_exchange'
   spec.version       = OmniExchange::VERSION
@@ -12,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'OmniExchange converts currencies using up-to-the-minute foreign exchange rates.'
   spec.homepage      = 'https://degica.com'
   spec.license       = 'MIT'
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.1')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
@@ -27,8 +28,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'base64', '~> 0.2.0'
+  spec.add_dependency 'bigdecimal', '~> 3'
   spec.add_dependency 'faraday', '~> 2'
   spec.add_dependency 'money', '~> 6.13.1'
+  spec.add_dependency 'racc', '~> 1.4'
+  spec.add_dependency 'stringio', '~> 3.1.2'
 
   spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'pry'
@@ -37,3 +42,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.80'
   spec.add_development_dependency 'vcr'
 end
+# rubocop:enable Metrics/BlockLength

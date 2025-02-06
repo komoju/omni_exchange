@@ -2,24 +2,24 @@
 http_interactions:
 - request:
     method: get
-    uri: https://xecdapi.xe.com/v1/historic_rate.json?amount=1&date=2018-01-01&from=USD&to=EUR%2CJPY%2CKRW
+    uri: https://xecd-api-ssl.xe.com/v1/historic_rate.json?amount=1&date=2017-01-01&from=USD&to=JPY%2CKRW%2CEUR
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Faraday v1.10.3
+      - Faraday v2.12.2
   response:
     status:
       code: 200
       message: OK
     headers:
       date:
-      - Thu, 06 Jul 2023 06:33:11 GMT
+      - Thu, 30 Jan 2025 06:33:36 GMT
       content-type:
       - application/json; charset=utf-8
       content-length:
-      - '287'
+      - '262'
       connection:
       - keep-alive
       access-control-allow-origin:
@@ -29,59 +29,17 @@ http_interactions:
       x-ratelimit-remaining:
       - '899'
       x-ratelimit-reset:
-      - '1688625900'
+      - '1738219500'
       x-raterequest-limit:
       - '30000'
       x-raterequest-remaining:
-      - '24424'
+      - '29962'
       x-raterequest-reset:
-      - '1690848000'
+      - '1740787200'
       x-request-id:
-      - f3621493-ab17-4f2d-a4d6-7700b7d8631f
+      - 54293ed7-5a2a-4ca4-92f1-4fb55ce155e9
     body:
       encoding: UTF-8
-      string: '{"terms":"http://www.xe.com/legal/dfs.php","privacy":"http://www.xe.com/privacy.php","from":"USD","amount":1.0,"timestamp":"2018-01-01T00:00:00Z","to":[{"quotecurrency":"EUR","mid":0.8331756502},{"quotecurrency":"JPY","mid":112.7050227918},{"quotecurrency":"KRW","mid":1066.2649691784}]}'
-  recorded_at: Thu, 06 Jul 2023 06:33:11 GMT
-- request:
-    method: get
-    uri: https://xecdapi.xe.com/v1/historic_rate.json?amount=1&date=2017-01-01&from=USD&to=JPY%2CKRW%2CEUR
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v1.10.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      date:
-      - Thu, 06 Jul 2023 06:54:48 GMT
-      content-type:
-      - application/json; charset=utf-8
-      content-length:
-      - '268'
-      connection:
-      - keep-alive
-      access-control-allow-origin:
-      - "*"
-      x-ratelimit-limit:
-      - '900'
-      x-ratelimit-remaining:
-      - '899'
-      x-ratelimit-reset:
-      - '1688626800'
-      x-raterequest-limit:
-      - '30000'
-      x-raterequest-remaining:
-      - '24419'
-      x-raterequest-reset:
-      - '1690848000'
-      x-request-id:
-      - 72c0b1bf-8c64-4b57-b286-b8c94b399505
-    body:
-      encoding: UTF-8
-      string: '{"terms":"http://www.xe.com/legal/dfs.php","privacy":"http://www.xe.com/privacy.php","from":"USD","amount":1.0,"timestamp":"2017-01-01T00:00:00Z","to":[{"quotecurrency":"EUR","mid":0.95034},{"quotecurrency":"JPY","mid":116.9695},{"quotecurrency":"KRW","mid":1207.26}]}'
-  recorded_at: Thu, 06 Jul 2023 06:54:48 GMT
+      string: '{"terms":"https://www.xe.com/legal/","privacy":"http://www.xe.com/privacy.php","from":"USD","amount":1.0,"timestamp":"2017-01-01T00:00:00Z","to":[{"quotecurrency":"EUR","mid":0.95034},{"quotecurrency":"JPY","mid":116.9695},{"quotecurrency":"KRW","mid":1207.26}]}'
+  recorded_at: Thu, 30 Jan 2025 06:33:36 GMT
 recorded_with: VCR 6.1.0
