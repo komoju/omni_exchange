@@ -11,15 +11,15 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'OmniExchange converts currencies using up-to-the-minute foreign exchange rates.'
   spec.description   = 'OmniExchange converts currencies using up-to-the-minute foreign exchange rates.'
-  spec.homepage      = 'https://degica.com'
+  spec.homepage      = 'https://komoju.com'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 3.1')
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.org'
 
-  spec.metadata['homepage_uri'] = 'https://degica.com'
-  spec.metadata['source_code_uri'] = 'https://github.com/degica/omni_exchange'
-  spec.metadata['changelog_uri'] = 'https://github.com/degica/omni_exchange'
+  spec.metadata['homepage_uri'] = 'https://komoju.com'
+  spec.metadata['source_code_uri'] = 'https://github.com/komoju/omni_exchange'
+  spec.metadata['changelog_uri'] = 'https://github.com/komoju/omni_exchange'
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
